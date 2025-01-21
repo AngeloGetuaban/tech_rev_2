@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:tech_rev/screens/dashboard_page.dart';
+import 'package:tech_rev/screens/registration_page.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -177,6 +178,24 @@ class LoginPage extends StatelessWidget {
                     fontSize: 16,
                     fontFamily: 'Poppins', // Custom modern font
                     color: Colors.black54,
+                  ),
+                ),
+              ),
+              SizedBox(height: 30),
+              // Already Have an Account? Login
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const RegistrationPage()),
+                  );
+                },
+                child: Text(
+                  'Dont have an account yet? Register Now',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'Poppins',
+                    color: Colors.blueAccent,
                   ),
                 ),
               ),

@@ -11,47 +11,16 @@ class QuizTechCreatePage extends StatefulWidget {
 }
 
 class _QuizTechCreatePageState extends State<QuizTechCreatePage> {
-  List<dynamic> quizzes = [];
   List<dynamic> quizItems = [];
   bool isLoading = true;
-  String? selectedQuizId;
 
   @override
   void initState() {
     super.initState();
-    _fetchQuizzes();
+    _fetchQuizItems();
   }
 
-  Future<void> _fetchQuizzes() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    try {
-      final response = await Supabase.instance.client
-          .from('quizes')
-          .select()
-          .eq('teacher_id', widget.teacherId);
-
-      setState(() {
-        quizzes = response ?? [];
-        if (quizzes.isNotEmpty) {
-          selectedQuizId = quizzes.first['quiz_id'];
-          _fetchQuizItems(selectedQuizId!);
-        }
-        isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error fetching quizzes: $e')),
-      );
-    }
-  }
-
-  Future<void> _fetchQuizItems(String quizId) async {
+  Future<void> _fetchQuizItems() async {
     setState(() {
       isLoading = true;
     });
@@ -60,7 +29,7 @@ class _QuizTechCreatePageState extends State<QuizTechCreatePage> {
       final response = await Supabase.instance.client
           .from('quiz_items')
           .select()
-          .eq('quiz_id', quizId);
+          .eq('teacher_id', widget.teacherId);
 
       setState(() {
         quizItems = response ?? [];
@@ -78,37 +47,31 @@ class _QuizTechCreatePageState extends State<QuizTechCreatePage> {
 
   Future<void> _addQuizItem(Map<String, dynamic> newQuizItem) async {
     try {
-      // Step 1: Insert a new quiz if no quiz_id is selected
-      if (selectedQuizId == null) {
-        final quizResponse = await Supabase.instance.client.from('quizes').insert({
-          'teacher_id': widget.teacherId,
-        }).select('quiz_id').single();
-
-        if (quizResponse != null) {
-          selectedQuizId = quizResponse['quiz_id'];
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('New quiz created successfully!')),
-          );
-        } else {
-          throw Exception('Failed to create a new quiz.');
-        }
-      }
-      // Step 2: Insert the quiz item with the retrieved or selected quiz_id
-      final quizItemWithQuizId = {
-        ...newQuizItem,
-        'quiz_id': selectedQuizId, // Add the selected or newly created quiz_id
-      };
-
-      await Supabase.instance.client.from('quiz_items').insert(quizItemWithQuizId);
+      await Supabase.instance.client.from('quiz_items').insert(newQuizItem);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Quiz item added successfully!')),
       );
-
-      // Refresh the quiz items list
-      if (selectedQuizId != null) _fetchQuizItems(selectedQuizId!);
+      _fetchQuizItems(); // Refresh the quiz items list
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error adding quiz item: $e')),
+      );
+    }
+  }
+
+  Future<void> _deleteQuizItem(String itemId) async {
+    try {
+      await Supabase.instance.client
+          .from('quiz_items')
+          .delete()
+          .eq('item_id', itemId);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Quiz item deleted successfully!')),
+      );
+      _fetchQuizItems(); // Refresh the list after deletion
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error deleting quiz item: $e')),
       );
     }
   }
@@ -227,10 +190,9 @@ class _QuizTechCreatePageState extends State<QuizTechCreatePage> {
                             answer2Controller.text.trim().isNotEmpty &&
                             answer3Controller.text.trim().isNotEmpty &&
                             answer4Controller.text.trim().isNotEmpty &&
-                            correctAnswerController.text.trim().isNotEmpty &&
-                            selectedQuizId != null) {
+                            correctAnswerController.text.trim().isNotEmpty) {
                           final newQuizItem = {
-                            'quiz_id': selectedQuizId,
+                            'teacher_id': widget.teacherId,
                             'item_question': questionController.text.trim(),
                             'item_answer_1': answer1Controller.text.trim(),
                             'item_answer_2': answer2Controller.text.trim(),
@@ -270,10 +232,10 @@ class _QuizTechCreatePageState extends State<QuizTechCreatePage> {
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
-          : quizzes.isEmpty
+          : quizItems.isEmpty
           ? Center(
         child: Text(
-          'No quiz created yet.',
+          'No Quiz Item Added Yet.',
           style: TextStyle(fontSize: 16, color: Colors.black54),
         ),
       )
@@ -284,6 +246,10 @@ class _QuizTechCreatePageState extends State<QuizTechCreatePage> {
           return ListTile(
             title: Text(item['item_question']),
             subtitle: Text('Correct Answer: ${item['item_correct_answer']}'),
+            trailing: IconButton(
+              icon: Icon(Icons.delete, color: Colors.red),
+              onPressed: () => _deleteQuizItem(item['item_id']),
+            ),
           );
         },
       ),
