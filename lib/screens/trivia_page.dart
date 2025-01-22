@@ -58,114 +58,149 @@ class _TriviaPageState extends State<TriviaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Welcome to Trivia Time',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Poppins',
-                color: Colors.black87,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 40),
-            // Top Icon
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.blueGrey.shade100,
-              ),
-              child: Icon(
-                Icons.lightbulb_outline, // A light bulb icon for trivia
-                size: 50,
-                color: Colors.blueGrey,
-              ),
-            ),
-            SizedBox(height: 40),
-
-            // Button for Image Rainbow
-            buildTriviaButton(
-              context,
-              icon: Icons.image,
-              label: "Image Rainbow",
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ImageRainbowPage(
-                        studentId: widget.studentId),
-                  ),
-                );
-              },
-            ),
-            SizedBox(height: 20),
-
-            // Button for Quiz Tech
-            buildTriviaButton(
-              context,
-              icon: Icons.quiz,
-              label: "Quiz Tech",
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        QuizTechPage(studentId: widget.studentId),
-                  ),
-                );
-              },
-            ),
-            SizedBox(height: 40),
-
-            // Display Scores
-            if (studentData != null) ...[
-              Divider(),
+          ? Center(
+        child: CircularProgressIndicator(
+          color: Colors.blueGrey[800],
+        ),
+      )
+          : Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.blueGrey[50]!, Colors.blueGrey[100]!],
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Welcome Text
               Text(
-                'Your Scores',
+                'Welcome to Trivia Time',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blueGrey,
+                  fontFamily: 'Poppins',
+                  color: Colors.blueGrey[800],
+                  shadows: [
+                    Shadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 5,
+                      offset: Offset(2, 2),
+                    ),
+                  ],
                 ),
+                textAlign: TextAlign.center,
               ),
               SizedBox(height: 10),
-              Table(
-                columnWidths: const {
-                  0: FlexColumnWidth(1),
-                  1: FlexColumnWidth(2),
-                },
-                children: [
-                  _buildScoreRow(
-                    'Latest Image Rainbow:',
-                    studentData!['image_rainbow_latest_score']?.toString() ??
-                        'N/A',
-                  ),
-                  _buildScoreRow(
-                    'Previous Image Rainbow:',
-                    studentData!['image_rainbow_prev_score']?.toString() ??
-                        'N/A',
-                  ),
-                  _buildScoreRow(
-                    'Latest Quiz:',
-                    studentData!['quiz_latest_score']?.toString() ?? 'N/A',
-                  ),
-                  _buildScoreRow(
-                    'Previous Quiz:',
-                    studentData!['quiz_previous_score']?.toString() ??
-                        'N/A',
-                  ),
-                ],
+
+              // Top Icon
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.blueGrey.shade100.withOpacity(0.2),
+                  border: Border.all(color: Colors.blueGrey[800]!, width: 2),
+                ),
+                child: Icon(
+                  Icons.lightbulb_outline, // A light bulb icon for trivia
+                  size: 50,
+                  color: Colors.blueGrey[800],
+                ),
               ),
+              SizedBox(height: 40),
+
+              // Button for Image Rainbow
+              buildTriviaButton(
+                context,
+                icon: Icons.image,
+                label: "Image Rainbow",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ImageRainbowPage(studentId: widget.studentId),
+                    ),
+                  );
+                },
+              ),
+              SizedBox(height: 20),
+
+              // Button for Quiz Tech
+              buildTriviaButton(
+                context,
+                icon: Icons.quiz,
+                label: "Quiz Tech",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => QuizTechPage(studentId: widget.studentId),
+                    ),
+                  );
+                },
+              ),
+              SizedBox(height: 40),
+
+              // Display Scores
+              if (studentData != null) ...[
+                Divider(
+                  color: Colors.blueGrey.withOpacity(0.2),
+                  thickness: 1,
+                ),
+                Text(
+                  'Your Scores',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blueGrey[800],
+                  ),
+                ),
+                SizedBox(height: 10),
+                Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Table(
+                    columnWidths: const {
+                      0: FlexColumnWidth(1),
+                      1: FlexColumnWidth(2),
+                    },
+                    children: [
+                      _buildScoreRow(
+                        'Latest Image Rainbow:',
+                        studentData!['image_rainbow_latest_score']?.toString() ?? 'N/A',
+                      ),
+                      _buildScoreRow(
+                        'Previous Image Rainbow:',
+                        studentData!['image_rainbow_prev_score']?.toString() ?? 'N/A',
+                      ),
+                      _buildScoreRow(
+                        'Latest Quiz:',
+                        studentData!['quiz_latest_score']?.toString() ?? 'N/A',
+                      ),
+                      _buildScoreRow(
+                        'Previous Quiz:',
+                        studentData!['quiz_previous_score']?.toString() ?? 'N/A',
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -174,31 +209,49 @@ class _TriviaPageState extends State<TriviaPage> {
   // Reusable button builder
   Widget buildTriviaButton(BuildContext context,
       {required IconData icon, required String label, required VoidCallback onPressed}) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.blueGrey.shade50,
-        minimumSize: Size(double.infinity, 60), // Full width button
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        gradient: LinearGradient(
+          colors: [Colors.blueGrey[600]!, Colors.blueGrey[800]!],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
-        elevation: 5,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(width: 20), // Left padding
-          Icon(icon, color: Colors.blueGrey),
-          SizedBox(width: 20), // Spacing between icon and text
-          Text(
-            label,
-            style: TextStyle(
-              color: Colors.blueGrey,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 10,
+            offset: Offset(0, 5),
           ),
         ],
+      ),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          padding: EdgeInsets.symmetric(vertical: 20),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(width: 20), // Left padding
+            Icon(icon, color: Colors.white),
+            SizedBox(width: 20), // Spacing between icon and text
+            Text(
+              label,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -210,14 +263,21 @@ class _TriviaPageState extends State<TriviaPage> {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             label,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Colors.blueGrey[800],
+            ),
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
             value,
-            style: TextStyle(fontSize: 16, color: Colors.blueGrey),
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.blueGrey[600],
+            ),
           ),
         ),
       ],

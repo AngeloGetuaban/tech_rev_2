@@ -76,7 +76,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('session_key', sessionKey);
         await prefs.setString('username', username);
-
+        await prefs.setString('account', accountType.toLowerCase());
         // Show success SnackBar
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(

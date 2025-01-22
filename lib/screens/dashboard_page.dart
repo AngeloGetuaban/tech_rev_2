@@ -123,7 +123,7 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget _buildStudentScaffold() {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black54,
         elevation: 0,
       ),
       drawer: _buildStudentDrawer(),
@@ -162,80 +162,149 @@ class _DashboardPageState extends State<DashboardPage> {
           final students = snapshot.data!;
 
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('WELCOME TO TECH REV TEACHER DASHBOARD', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 30.0)),
-                SizedBox(height: 30),
-                Text(
-                  'Students Overview',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Poppins',
-                    color: Colors.black87,
+                // Welcome Text
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Text(
+                    'WELCOME TO TECH REV TEACHER DASHBOARD',
+                    style: TextStyle(
+                      color: Colors.blueAccent,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24.0,
+                      fontFamily: 'Poppins',
+                    ),
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 20),
+                // Students Overview Title
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Text(
+                    'Students Overview',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Poppins',
+                      color: Colors.blueAccent,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                // DataTable
                 Expanded(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                    child: DataTable(
-                      columns: [
-                        DataColumn(
-                          label: Text(
-                            'Student Names',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 10,
+                            offset: Offset(0, 5),
                           ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Image Rainbow',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Quiz Tech',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Section',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                      rows: students.map((student) {
-                        return DataRow(cells: [
-                          DataCell(
-                            Text(
-                              student['full_name'] ?? 'N/A',
-                              overflow: TextOverflow.ellipsis, // Truncate long text
+                        ],
+                      ),
+                      padding: EdgeInsets.all(10),
+                      child: DataTable(
+                        columns: [
+                          DataColumn(
+                            label: Text(
+                              'Student Names',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blueAccent,
+                              ),
                             ),
                           ),
-                          DataCell(
-                            Text(
-                              '${student['image_rainbow_latest_score'] ?? 'N/A'} (${student['image_rainbow_prev_score'] ?? 'N/A'})',
-                              overflow: TextOverflow.ellipsis,
+                          DataColumn(
+                            label: Text(
+                              'Image Rainbow',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blueAccent,
+                              ),
                             ),
                           ),
-                          DataCell(
-                            Text(
-                              '${student['quiz_latest_score'] ?? 'N/A'} (${student['quiz_previous_score'] ?? 'N/A'})',
-                              overflow: TextOverflow.ellipsis,
+                          DataColumn(
+                            label: Text(
+                              'Quiz Tech',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blueAccent,
+                              ),
                             ),
                           ),
-                          DataCell(
-                            Text(
-                              '${student['section_name'] ?? 'N/A'}',
-                              overflow: TextOverflow.ellipsis,
+                          DataColumn(
+                            label: Text(
+                              'Section',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blueAccent,
+                              ),
                             ),
                           ),
-                        ]);
-                      }).toList(),
+                        ],
+                        rows: students.map((student) {
+                          return DataRow(cells: [
+                            DataCell(
+                              Text(
+                                student['full_name'] ?? 'N/A',
+                                overflow: TextOverflow.ellipsis, // Truncate long text
+                                style: TextStyle(color: Colors.black87),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                '${student['image_rainbow_latest_score'] ?? 'N/A'} (${student['image_rainbow_prev_score'] ?? 'N/A'})',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(color: Colors.black87),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                '${student['quiz_latest_score'] ?? 'N/A'} (${student['quiz_previous_score'] ?? 'N/A'})',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(color: Colors.black87),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                '${student['section_name'] ?? 'N/A'}',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(color: Colors.black87),
+                              ),
+                            ),
+                          ]);
+                        }).toList(),
+                      ),
                     ),
                   ),
                 ),
@@ -249,111 +318,158 @@ class _DashboardPageState extends State<DashboardPage> {
 
 
   Widget _buildBodyStudent() {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Welcome Text
-          Text(
-            'WELCOME TO TECH REV',
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              color: Colors.blueGrey,
-            ),
-          ),
-          SizedBox(height: 40),
-
-          // Icon (Brain)
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.blueGrey.shade100,
-            ),
-            child: Icon(
-              Icons.memory, // Brain-like icon
-              size: 50,
-              color: Colors.blueGrey,
-            ),
-          ),
-          SizedBox(height: 40),
-
-          // MODULE Button
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ModulesScreen(),
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blueGrey.shade50,
-              minimumSize: Size(double.infinity, 60),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.blueGrey[800]!, Colors.blueGrey[900]!],
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Welcome Text
+            Text(
+              'WELCOME TO TECH REV',
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
-              elevation: 5,
+              textAlign: TextAlign.center,
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(width: 20),
-                Icon(Icons.book, color: Colors.blueGrey),
-                SizedBox(width: 20),
-                Text(
-                  'MODULE',
-                  style: TextStyle(
-                    color: Colors.blueGrey,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+            SizedBox(height: 40),
+
+            // Icon (Brain)
+            Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.blueGrey.shade100.withOpacity(0.2),
+                border: Border.all(color: Colors.white, width: 2),
+              ),
+              child: Icon(
+                Icons.memory, // Brain-like icon
+                size: 50,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(height: 40),
+
+            // MODULE Button
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                gradient: LinearGradient(
+                  colors: [Colors.blueGrey[600]!, Colors.blueGrey[800]!],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 10,
+                    offset: Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ModulesScreen(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
                   ),
                 ),
-              ],
-            ),
-          ),
-          SizedBox(height: 20),
-
-          // TRIVIA TIME Button
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TriviaPage(studentId: userData!['student_id']),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(width: 20),
+                    Icon(Icons.book, color: Colors.white),
+                    SizedBox(width: 20),
+                    Text(
+                      'MODULE',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blueGrey.shade50,
-              minimumSize: Size(double.infinity, 60),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
               ),
-              elevation: 5,
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(width: 20),
-                Icon(Icons.lightbulb, color: Colors.blueGrey),
-                SizedBox(width: 20),
-                Text(
-                  'TRIVIA TIME',
-                  style: TextStyle(
-                    color: Colors.blueGrey,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+            SizedBox(height: 20),
+
+            // TRIVIA TIME Button
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                gradient: LinearGradient(
+                  colors: [Colors.blueGrey[600]!, Colors.blueGrey[800]!],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 10,
+                    offset: Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TriviaPage(studentId: userData!['student_id']),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
                   ),
                 ),
-              ],
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(width: 20),
+                    Icon(Icons.lightbulb, color: Colors.white),
+                    SizedBox(width: 20),
+                    Text(
+                      'TRIVIA TIME',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -413,33 +529,53 @@ Widget _buildTeacherDrawer() {
 
   Widget _buildStudentDrawer() {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          _buildDrawerHeader(),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Profile Settings'),
-            onTap: _navigateToProfileSettings,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.blueGrey[800]!, Colors.blueGrey[900]!],
           ),
-          Divider(),
-          ListTile(
-              leading: Icon(Icons.add_business_rounded),
-              title: Text('Edit Section'),
+        ),
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            _buildDrawerHeader(),
+            ListTile(
+              leading: Icon(Icons.settings, color: Colors.white),
+              title: Text(
+                'Profile Settings',
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: _navigateToProfileSettings,
+            ),
+            Divider(color: Colors.white.withOpacity(0.2)),
+            ListTile(
+              leading: Icon(Icons.edit, color: Colors.white),
+              title: Text(
+                'Edit Section',
+                style: TextStyle(color: Colors.white),
+              ),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => EditSectionPage(student: userData!['student_id'])),
+                  MaterialPageRoute(
+                    builder: (context) => EditSectionPage(student: userData!['student_id']),
+                  ),
                 );
-              }
-          ),
-          Divider(),
-          ListTile(
-            leading: Icon(Icons.logout),
-            title: Text('Logout'),
-            onTap: _logout,
-          ),
-        ],
+              },
+            ),
+            Divider(color: Colors.white.withOpacity(0.2)),
+            ListTile(
+              leading: Icon(Icons.logout, color: Colors.red[400]),
+              title: Text(
+                'Logout',
+                style: TextStyle(color: Colors.red[400]),
+              ),
+              onTap: _logout,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -196,7 +196,6 @@ class _ImageRainbowGamePageState extends State<ImageRainbowGamePage> {
     }
   }
 
-
   void _handleAnswer(String selectedAnswer) {
     final correctAnswer = imageRainbows[currentQuestionIndex]['rainbow_correct_answer'];
 
@@ -270,7 +269,11 @@ class _ImageRainbowGamePageState extends State<ImageRainbowGamePage> {
   Widget build(BuildContext context) {
     if (isLoading) {
       return Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+        body: Center(
+          child: CircularProgressIndicator(
+            color: Colors.blueGrey[800],
+          ),
+        ),
       );
     }
 
@@ -279,7 +282,11 @@ class _ImageRainbowGamePageState extends State<ImageRainbowGamePage> {
         body: Center(
           child: Text(
             'No image rainbow data available.',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.blueGrey[800],
+            ),
           ),
         ),
       );
@@ -287,83 +294,112 @@ class _ImageRainbowGamePageState extends State<ImageRainbowGamePage> {
 
     final currentImageRainbow = imageRainbows[currentQuestionIndex];
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Space elements evenly
-          crossAxisAlignment: CrossAxisAlignment.center, // Center align horizontally
-          children: [
-            // Title
-            Text(
-              'Guess the Image',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-                fontSize: 24,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 20), // Add a bit of spacing after the title
-
-            // Image display
-            SizedBox(
-              width: 200, // Fixed width
-              height: 200, // Fixed height
-              child: Image.network(
-                currentImageRainbow['rainbow_image'],
-                fit: BoxFit.cover, // Shrinks or expands the image to fit the box
-                errorBuilder: (context, error, stackTrace) {
-                  return Icon(Icons.broken_image, size: 100);
-                },
-              ),
-            ),
-            SizedBox(height: 20), // Add spacing after the image
-
-            // Choices
-            Column(
-              children: [
-                // First row with 2 choices
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: _buildChoiceButton(currentImageRainbow['rainbow_choice_1']),
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: _buildChoiceButton(currentImageRainbow['rainbow_choice_2']),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10), // Add slight spacing between rows
-                // Second row with 2 choices
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: _buildChoiceButton(currentImageRainbow['rainbow_choice_3']),
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: _buildChoiceButton(currentImageRainbow['rainbow_choice_4']),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.blueGrey[50]!, Colors.blueGrey[100]!],
+          ),
         ),
-      )
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Title
+              Text(
+                'Guess the Image',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueGrey[800],
+                  fontSize: 32, // Increased font size
+                  shadows: [
+                    Shadow(
+                      color: Colors.black.withOpacity(0.2), // Add a subtle shadow
+                      blurRadius: 5,
+                      offset: Offset(2, 2),
+                    ),
+                  ],
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20),
+
+              // Image display (larger image)
+              Container(
+                width: 350, // Increased width
+                height: 350, // Increased height
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 10,
+                      offset: Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.network(
+                    currentImageRainbow['rainbow_image'],
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(Icons.broken_image, size: 100, color: Colors.blueGrey[800]);
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+
+              // Choices
+              Column(
+                children: [
+                  // First row with 2 choices
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: _buildChoiceButton(currentImageRainbow['rainbow_choice_1']),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: _buildChoiceButton(currentImageRainbow['rainbow_choice_2']),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  // Second row with 2 choices
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: _buildChoiceButton(currentImageRainbow['rainbow_choice_3']),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: _buildChoiceButton(currentImageRainbow['rainbow_choice_4']),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -372,16 +408,18 @@ class _ImageRainbowGamePageState extends State<ImageRainbowGamePage> {
       onPressed: () => _handleAnswer(choice),
       style: ElevatedButton.styleFrom(
         padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-        backgroundColor: Colors.blueGrey.shade100,
+        backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(15),
         ),
+        elevation: 5,
       ),
       child: Text(
         choice,
         style: TextStyle(
           fontSize: 18,
-          color: Colors.blueGrey,
+          color: Colors.blueGrey[800],
+          fontWeight: FontWeight.bold,
         ),
         textAlign: TextAlign.center,
       ),

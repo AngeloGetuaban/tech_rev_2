@@ -98,108 +98,134 @@ class LoginPage extends StatelessWidget {
             end: Alignment.bottomCenter,
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Logo Section
-              Container(
-                width: 150,
-                height: 150,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: AssetImage('assets/logo.png'), // Replace with your logo asset
-                    fit: BoxFit.cover,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 50), // Add spacing at the top
+                // Logo Section
+                Container(
+                  width: 150,
+                  height: 150,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: AssetImage('assets/logo.png'), // Keep the logo
+                      fit: BoxFit.cover,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: Offset(0, 5),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              SizedBox(height: 20),
-              Text(
-                'TECH REV',
-                style: TextStyle(
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Poppins', // Custom modern font
-                  color: Colors.black87,
-                ),
-              ),
-              SizedBox(height: 20),
-              // Login Title
-              Text(
-                'Login',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Poppins', // Custom modern font
-                  color: Colors.black87,
-                ),
-              ),
-              SizedBox(height: 30),
-              // Username TextField
-              TextField(
-                controller: _usernameController,
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  prefixIcon: Icon(Icons.person),
-                ),
-              ),
-              SizedBox(height: 20),
-              // Password TextField
-              TextField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  prefixIcon: Icon(Icons.lock),
-                ),
-              ),
-              SizedBox(height: 30),
-              // Login Button
-              ElevatedButton(
-                onPressed: loginUser,
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  backgroundColor: Colors.white, // Button background color
-                ),
-                child: Text(
-                  'Login',
+                SizedBox(height: 20),
+                // App Name
+                Text(
+                  'TECH REV',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins', // Custom modern font
+                    color: Colors.black87,
+                  ),
+                ),
+                SizedBox(height: 10),
+                // Login Title
+                Text(
+                  'Login to Your Account',
+                  style: TextStyle(
+                    fontSize: 18,
                     fontFamily: 'Poppins', // Custom modern font
                     color: Colors.black54,
                   ),
                 ),
-              ),
-              SizedBox(height: 30),
-              // Already Have an Account? Login
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const RegistrationPage()),
-                  );
-                },
-                child: Text(
-                  'Dont have an account yet? Register Now',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    color: Colors.blueAccent,
+                SizedBox(height: 30),
+                // Username TextField
+                TextField(
+                  controller: _usernameController,
+                  decoration: InputDecoration(
+                    labelText: 'Username',
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.8),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                    ),
+                    prefixIcon: Icon(Icons.person, color: Colors.blueAccent),
+                    contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                   ),
                 ),
-              ),
-            ],
+                SizedBox(height: 20),
+                // Password TextField
+                TextField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.8),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                    ),
+                    prefixIcon: Icon(Icons.lock, color: Colors.blueAccent),
+                    contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                  ),
+                ),
+                SizedBox(height: 30),
+                // Login Button
+                SizedBox(
+                  width: double.infinity, // Make the button take full width
+                  child: ElevatedButton(
+                    onPressed: loginUser,
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      backgroundColor: Colors.white, // Button background color
+                      shadowColor: Colors.black.withOpacity(0.2),
+                      elevation: 5,
+                    ),
+                    child: Text(
+                      'Login',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Poppins', // Custom modern font
+                        color: Colors.blueAccent,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                // Already Have an Account? Login
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const RegistrationPage()),
+                    );
+                  },
+                  child: Text(
+                    'Don\'t have an account yet? Register Now',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Poppins',
+                      color: Colors.blueAccent,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 50), // Add spacing at the bottom
+              ],
+            ),
           ),
         ),
       ),
