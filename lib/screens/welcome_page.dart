@@ -74,7 +74,7 @@ class _WelcomePageState extends State<WelcomePage> {
             SizedBox(height: 10),
             // Title Section
             Text(
-              'TECH REV',
+              'TECHREV',
               style: TextStyle(
                 fontSize: 36,
                 fontWeight: FontWeight.bold,

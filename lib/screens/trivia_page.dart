@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:tech_rev/screens/game_welcome_screen.dart';
 import 'package:tech_rev/screens/image-rainbows.dart';
 import 'package:tech_rev/screens/quiz_tech.dart';
 
@@ -71,135 +72,153 @@ class _TriviaPageState extends State<TriviaPage> {
             colors: [Colors.blueGrey[50]!, Colors.blueGrey[100]!],
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Welcome Text
-              Text(
-                'Welcome to Trivia Time',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Poppins',
-                  color: Colors.blueGrey[800],
-                  shadows: [
-                    Shadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 5,
-                      offset: Offset(2, 2),
-                    ),
-                  ],
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 10),
-
-              // Top Icon
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.blueGrey.shade100.withOpacity(0.2),
-                  border: Border.all(color: Colors.blueGrey[800]!, width: 2),
-                ),
-                child: Icon(
-                  Icons.lightbulb_outline, // A light bulb icon for trivia
-                  size: 50,
-                  color: Colors.blueGrey[800],
-                ),
-              ),
-              SizedBox(height: 40),
-
-              // Button for Image Rainbow
-              buildTriviaButton(
-                context,
-                icon: Icons.image,
-                label: "Image Rainbow",
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ImageRainbowPage(studentId: widget.studentId),
-                    ),
-                  );
-                },
-              ),
-              SizedBox(height: 20),
-
-              // Button for Quiz Tech
-              buildTriviaButton(
-                context,
-                icon: Icons.quiz,
-                label: "Quiz Tech",
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => QuizTechPage(studentId: widget.studentId),
-                    ),
-                  );
-                },
-              ),
-              SizedBox(height: 40),
-
-              // Display Scores
-              if (studentData != null) ...[
-                Divider(
-                  color: Colors.blueGrey.withOpacity(0.2),
-                  thickness: 1,
-                ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 60,),
+                // Welcome Text
                 Text(
-                  'Your Scores',
+                  'Welcome to Trivia Time',
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 28,
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
+                    color: Colors.blueGrey[800],
+                    shadows: [
+                      Shadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 5,
+                        offset: Offset(2, 2),
+                      ),
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 10),
+          
+                // Top Icon
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.blueGrey.shade100.withOpacity(0.2),
+                    border: Border.all(color: Colors.blueGrey[800]!, width: 2),
+                  ),
+                  child: Icon(
+                    Icons.lightbulb_outline, // A light bulb icon for trivia
+                    size: 50,
                     color: Colors.blueGrey[800],
                   ),
                 ),
-                SizedBox(height: 10),
-                Container(
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 10,
-                        offset: Offset(0, 5),
+                SizedBox(height: 40),
+          
+                buildTriviaButton(
+                  context,
+                  icon: Icons.gamepad,
+                  label: "Tic Tac Tech",
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => WelcomeScreen(),
                       ),
-                    ],
-                  ),
-                  child: Table(
-                    columnWidths: const {
-                      0: FlexColumnWidth(1),
-                      1: FlexColumnWidth(2),
-                    },
-                    children: [
-                      _buildScoreRow(
-                        'Latest Image Rainbow:',
-                        studentData!['image_rainbow_latest_score']?.toString() ?? 'N/A',
-                      ),
-                      _buildScoreRow(
-                        'Previous Image Rainbow:',
-                        studentData!['image_rainbow_prev_score']?.toString() ?? 'N/A',
-                      ),
-                      _buildScoreRow(
-                        'Latest Quiz:',
-                        studentData!['quiz_latest_score']?.toString() ?? 'N/A',
-                      ),
-                      _buildScoreRow(
-                        'Previous Quiz:',
-                        studentData!['quiz_previous_score']?.toString() ?? 'N/A',
-                      ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
+                SizedBox(height: 20),
+          
+                // Button for Image Rainbow
+                buildTriviaButton(
+                  context,
+                  icon: Icons.image,
+                  label: "Guess the Picture",
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ImageRainbowPage(studentId: widget.studentId),
+                      ),
+                    );
+                  },
+                ),
+                SizedBox(height: 20),
+          
+                // Button for Quiz Tech
+                buildTriviaButton(
+                  context,
+                  icon: Icons.quiz,
+                  label: "Quiz Tech",
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => QuizTechPage(studentId: widget.studentId),
+                      ),
+                    );
+                  },
+                ),
+                SizedBox(height: 40),
+          
+                // Display Scores
+                if (studentData != null) ...[
+                  Divider(
+                    color: Colors.blueGrey.withOpacity(0.2),
+                    thickness: 1,
+                  ),
+                  Text(
+                    'Your Scores',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueGrey[800],
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Table(
+                      columnWidths: const {
+                        0: FlexColumnWidth(1),
+                        1: FlexColumnWidth(2),
+                      },
+                      children: [
+                        _buildScoreRow(
+                          'Latest Guess the Picture:',
+                          studentData!['image_rainbow_latest_score']?.toString() ?? 'N/A',
+                        ),
+                        _buildScoreRow(
+                          'Previous Guess the Picture:',
+                          studentData!['image_rainbow_prev_score']?.toString() ?? 'N/A',
+                        ),
+                        _buildScoreRow(
+                          'Latest Quiz:',
+                          studentData!['quiz_latest_score']?.toString() ?? 'N/A',
+                        ),
+                        _buildScoreRow(
+                          'Previous Quiz:',
+                          studentData!['quiz_previous_score']?.toString() ?? 'N/A',
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),

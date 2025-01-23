@@ -181,7 +181,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     ],
                   ),
                   child: Text(
-                    'WELCOME TO TECH REV TEACHER DASHBOARD',
+                    'WELCOME TO TECHREV TEACHER DASHBOARD',
                     style: TextStyle(
                       color: Colors.blueAccent,
                       fontWeight: FontWeight.bold,
@@ -333,7 +333,7 @@ class _DashboardPageState extends State<DashboardPage> {
           children: [
             // Welcome Text
             Text(
-              'WELCOME TO TECH REV',
+              'WELCOME TO TECHREV',
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
@@ -498,7 +498,7 @@ Widget _buildTeacherDrawer() {
           ),
           ListTile(
             leading: Icon(Icons.image),
-            title: Text('Image Rainbow'),
+            title: Text('Guess the Picture'),
             onTap: () {
               Navigator.push(
                 context,

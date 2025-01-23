@@ -23,7 +23,7 @@ class ImageRainbowPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Welcome to Image Rainbow',
+              'Welcome to Guess the Picture',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
