@@ -276,7 +276,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           return DataRow(cells: [
                             DataCell(
                               Text(
-                                student['full_name'] ?? 'N/A',
+                                '${student['first_name']} ${student['last_name']}'  ?? 'N/A',
                                 overflow: TextOverflow.ellipsis, // Truncate long text
                                 style: TextStyle(color: Colors.black87),
                               ),
@@ -488,7 +488,7 @@ Widget _buildTeacherDrawer() {
           ),
           ListTile(
             leading: Icon(Icons.add_business_rounded),
-            title: Text('Student and Sections'),
+            title: Text('Student and Rooms'),
             onTap: () {
               Navigator.push(
                 context,
@@ -553,7 +553,7 @@ Widget _buildTeacherDrawer() {
             ListTile(
               leading: Icon(Icons.edit, color: Colors.white),
               title: Text(
-                'Edit Section',
+                'Section',
                 style: TextStyle(color: Colors.white),
               ),
               onTap: () {
@@ -583,7 +583,7 @@ Widget _buildTeacherDrawer() {
   Widget _buildDrawerHeader() {
     return UserAccountsDrawerHeader(
       accountName: Text(
-        userData?['full_name'] ?? 'Loading...',
+        '${userData?['first_name']} ${userData?['last_name']}' ?? 'Loading...',
         style: TextStyle(color: Colors.black),
       ),
       accountEmail: Text(

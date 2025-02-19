@@ -74,7 +74,7 @@ class _EditSectionPageState extends State<EditSectionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Section'),
+        title: Text('Section'),
         backgroundColor: const Color(0xFF3A86FF),
       ),
       body: isLoading
@@ -86,20 +86,13 @@ class _EditSectionPageState extends State<EditSectionPage> {
           children: [
             TextField(
               controller: _sectionController,
+              readOnly: true,
               decoration: InputDecoration(
                 labelText: 'Section Name',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _updateSection,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF3A86FF),
-              ),
-              child: Text('Save'),
             ),
           ],
         ),

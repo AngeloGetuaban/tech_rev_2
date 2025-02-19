@@ -25,6 +25,24 @@ class EditFieldPage extends StatelessWidget {
 
     Future<void> updateField() async {
       try {
+        // Validate input: Only letters and spaces allowed
+        final inputValue = controller.text.trim();
+        final validInput = RegExp(r'^[a-zA-Z\s]+$');
+
+        if (inputValue.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: You cannot leave this field empty.')),
+          );
+          return;
+        }
+
+        if (!validInput.hasMatch(inputValue)) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: Only letters and spaces are allowed.')),
+          );
+          return;
+        }
+
         // Determine the table and ID field
         final tableName = account.toLowerCase() == 'teacher' ? 'teachers' : 'students';
         final idField = account.toLowerCase() == 'teacher' ? 'teacher_id' : 'student_id';
@@ -37,9 +55,9 @@ class EditFieldPage extends StatelessWidget {
         // Perform the update and request updated rows
         final response = await Supabase.instance.client
             .from(tableName)
-            .update({fieldName: controller.text.trim()})
+            .update({fieldName: inputValue})
             .eq(idField, idValue)
-            .select(); // This ensures the updated rows are returned
+            .select(); // Ensures the updated rows are returned
 
         if (response != null && response.isNotEmpty) {
           final prefs = await SharedPreferences.getInstance();
@@ -49,10 +67,11 @@ class EditFieldPage extends StatelessWidget {
           if (updatedData.containsKey(fieldName)) {
             await prefs.setString(fieldName, updatedData[fieldName]);
           }
+
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('$fieldName updated successfully!')),
           );
-          Navigator.pop(context, controller.text.trim());
+          Navigator.pop(context, inputValue);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Failed to update $fieldName.')),
@@ -77,12 +96,21 @@ class EditFieldPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(
+            TextFormField(
               controller: controller,
               decoration: InputDecoration(
                 labelText: 'Enter new $fieldName',
                 border: OutlineInputBorder(),
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'you cannot leave this empty';
+                }
+                if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) {
+                  return 'you can only input letters and spaces';
+                }
+                return null;
+              },
             ),
             SizedBox(height: 20),
             ElevatedButton(

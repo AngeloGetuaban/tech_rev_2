@@ -21,6 +21,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
   void initState() {
     super.initState();
     userData = _handleNullValues(widget.userData);
+    _refreshUserData();
   }
 
   Map<String, dynamic> _handleNullValues(Map<String, dynamic> data) {
@@ -28,7 +29,9 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     return {
       'student_id': data['student_id'] ?? '',
       'teacher_id': data['teacher_id'] ?? '',
-      'full_name': data['full_name'] ?? 'Unknown',
+      'first_name': data['first_name'] ?? 'Unknown',
+      'last_name': data['last_name'] ?? 'Unknown',
+      'middle_name': data['middle_name'] ?? 'Unknown',
       'username': data['username'] ?? 'Unknown',
       'prof_pic': data['prof_pic'], // Can remain null
       'account': data['account'] ?? 'Unknown',
@@ -64,7 +67,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
         // Update SharedPreferences for the updated fields (excluding account)
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('username', userData['username']);
-        await prefs.setString('full_name', userData['full_name']);
+        await prefs.setString('first_name', userData['first_name']);
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Profile refreshed successfully!')),
@@ -113,26 +116,80 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
               SizedBox(height: 30),
               Divider(),
               ListTile(
-                title: Text('Full Name'),
-                subtitle: Text(userData['full_name']),
+                title: Text('First Name'),
+                subtitle: Text(userData['first_name']),
                 leading: Icon(Icons.edit),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => EditFieldPage(
-                        title: 'Edit Full Name',
+                        title: 'Edit First Name',
                         student_id: userData['student_id'],
                         teacher_id: userData['teacher_id'],
-                        fieldName: 'full_name',
-                        initialValue: userData['full_name'],
+                        fieldName: 'first_name',
+                        initialValue: userData['first_name'],
                         account: userData['account'],
                       ),
                     ),
                   ).then((updatedValue) {
                     if (updatedValue != null) {
                       setState(() {
-                        userData['full_name'] = updatedValue;
+                        userData['first_name'] = updatedValue;
+                      });
+                    }
+                  });
+                },
+              ),
+              Divider(),
+              ListTile(
+                title: Text('Middle Name'),
+                subtitle: Text(userData['middle_name']),
+                leading: Icon(Icons.edit),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditFieldPage(
+                        title: 'Edit Middle Name',
+                        student_id: userData['student_id'],
+                        teacher_id: userData['teacher_id'],
+                        fieldName: 'middle_name',
+                        initialValue: userData['middle_name'],
+                        account: userData['account'],
+                      ),
+                    ),
+                  ).then((updatedValue) {
+                    if (updatedValue != null) {
+                      setState(() {
+                        userData['middle_name'] = updatedValue;
+                      });
+                    }
+                  });
+                },
+              ),
+              Divider(),
+              ListTile(
+                title: Text('Last Name'),
+                subtitle: Text(userData['last_name']),
+                leading: Icon(Icons.edit),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditFieldPage(
+                        title: 'Edit Last Name',
+                        student_id: userData['student_id'],
+                        teacher_id: userData['teacher_id'],
+                        fieldName: 'last_name',
+                        initialValue: userData['last_name'],
+                        account: userData['account'],
+                      ),
+                    ),
+                  ).then((updatedValue) {
+                    if (updatedValue != null) {
+                      setState(() {
+                        userData['first_name'] = updatedValue;
                       });
                     }
                   });

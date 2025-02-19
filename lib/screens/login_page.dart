@@ -6,87 +6,100 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:tech_rev/screens/dashboard_page.dart';
 import 'package:tech_rev/screens/registration_page.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final _usernameController = TextEditingController();
-    final _passwordController = TextEditingController();
+  _LoginPageState createState() => _LoginPageState();
+}
 
-    Future<void> loginUser() async {
-      final username = _usernameController.text.trim();
-      final password = _passwordController.text.trim();
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
 
-      if (username.isEmpty || password.isEmpty) {
+  Future<void> loginUser() async {
+    final username = _usernameController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (username.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter both username and password.')),
+      );
+      return;
+    }
+
+    // Hash the password using SHA-256
+    final bytes = utf8.encode(password); // Convert password to bytes
+    final hashedPassword = sha256.convert(bytes).toString(); // Hash the bytes
+
+    try {
+      // Check in students table
+      final studentResponse = await Supabase.instance.client
+          .from('students')
+          .select()
+          .eq('username', username)
+          .eq('password', hashedPassword);
+
+      if (studentResponse.isNotEmpty) {
+        final sessionKey = "student_${DateTime.now().millisecondsSinceEpoch}";
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('session_key', sessionKey);
+        await prefs.setString('username', username);
+        await prefs.setString('account', 'student');
+
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Please enter both username and password.')),
+          SnackBar(content: Text('Login successful as Student!')),
+        );
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => DashboardPage(username: username, account: 'student'),
+          ),
         );
         return;
       }
 
-      // Hash the password using SHA-256
-      final bytes = utf8.encode(password); // Convert password to bytes
-      final hashedPassword = sha256.convert(bytes).toString(); // Hash the bytes
+      // Check in teachers table
+      final teacherResponse = await Supabase.instance.client
+          .from('teachers')
+          .select()
+          .eq('username', username)
+          .eq('password', hashedPassword);
 
-      try {
-        // Check in students table
-        final studentResponse = await Supabase.instance.client
-            .from('students')
-            .select()
-            .eq('username', username)
-            .eq('password', hashedPassword);
+      if (teacherResponse.isNotEmpty) {
+        final sessionKey = "teacher_${DateTime.now().millisecondsSinceEpoch}";
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('session_key', sessionKey);
+        await prefs.setString('username', username);
+        await prefs.setString('account', 'teacher');
 
-        if (studentResponse != null && studentResponse.isNotEmpty) {
-          // Create session key and save it to SharedPreferences
-          final sessionKey = "student_${DateTime.now().millisecondsSinceEpoch}";
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.setString('session_key', sessionKey);
-          await prefs.setString('username', username);
-          await prefs.setString('account', 'student');
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Login successful as Student!')),
-          );
-
-          // Navigate to the home page or next screen
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => DashboardPage(username: username, account: 'student',)));
-          return;
-        }
-
-        // Check in teachers table
-        final teacherResponse = await Supabase.instance.client
-            .from('teachers')
-            .select()
-            .eq('username', username)
-            .eq('password', hashedPassword);
-
-        if (teacherResponse != null && teacherResponse.isNotEmpty) {
-          // Create session key and save it to SharedPreferences
-          final sessionKey = "teacher_${DateTime.now().millisecondsSinceEpoch}";
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.setString('session_key', sessionKey);
-          await prefs.setString('username', username);
-          await prefs.setString('account', 'teacher');
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Login successful as Teacher!')),
-          );
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => DashboardPage(username: username, account: 'teacher',)));
-          return;
-        }
-
-        // If no matches found
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Invalid username or password.')),
+          SnackBar(content: Text('Login successful as Teacher!')),
         );
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => DashboardPage(username: username, account: 'teacher'),
+          ),
         );
+        return;
       }
-    }
 
+      // If no matches found
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Invalid username or password.')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -98,13 +111,13 @@ class LoginPage extends StatelessWidget {
             end: Alignment.bottomCenter,
           ),
         ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 50), // Add spacing at the top
+                SizedBox(height: 40),
                 // Logo Section
                 Container(
                   width: 150,
@@ -112,37 +125,30 @@ class LoginPage extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                      image: AssetImage('assets/logo.png'), // Keep the logo
+                      image: AssetImage('assets/logo.png'), // Replace with your logo asset
                       fit: BoxFit.cover,
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 10,
-                        offset: Offset(0, 5),
-                      ),
-                    ],
                   ),
                 ),
                 SizedBox(height: 20),
-                // App Name
                 Text(
-                  'TECH REV',
+                  'TECHREV',
                   style: TextStyle(
                     fontSize: 36,
                     fontWeight: FontWeight.bold,
-                    fontFamily: 'Poppins', // Custom modern font
+                    fontFamily: 'Poppins',
                     color: Colors.black87,
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 20),
                 // Login Title
                 Text(
-                  'Login to Your Account',
+                  'Login',
                   style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: 'Poppins', // Custom modern font
-                    color: Colors.black54,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
+                    color: Colors.black87,
                   ),
                 ),
                 SizedBox(height: 30),
@@ -151,61 +157,70 @@ class LoginPage extends StatelessWidget {
                   controller: _usernameController,
                   decoration: InputDecoration(
                     labelText: 'Username',
-                    filled: true,
-                    fillColor: Colors.white.withOpacity(0.8),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
                     ),
-                    prefixIcon: Icon(Icons.person, color: Colors.blueAccent),
-                    contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                    prefixIcon: Icon(Icons.person),
                   ),
                 ),
                 SizedBox(height: 20),
                 // Password TextField
-                TextField(
+                TextFormField(
                   controller: _passwordController,
-                  obscureText: true,
+                  obscureText: !_isPasswordVisible,
                   decoration: InputDecoration(
                     labelText: 'Password',
-                    filled: true,
-                    fillColor: Colors.white.withOpacity(0.8),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
                     ),
-                    prefixIcon: Icon(Icons.lock, color: Colors.blueAccent),
-                    contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                    prefixIcon: Icon(Icons.lock),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isPasswordVisible = !_isPasswordVisible;
+                        });
+                      },
+                    ),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a password';
+                    }
+                    if (value.length < 6) {
+                      return 'Password must be at least 6 characters';
+                    }
+                    if (!RegExp(r'^(?=.*[0-9])(?=.*[!@#\$%^&*])[A-Za-z\d!@#\$%^&*]{8,16}$')
+                        .hasMatch(value)) {
+                      return 'Password must be 8-16 characters long and include at least one number and one special character';
+                    }
+                    return null;
+                  },
                 ),
                 SizedBox(height: 30),
                 // Login Button
-                SizedBox(
-                  width: double.infinity, // Make the button take full width
-                  child: ElevatedButton(
-                    onPressed: loginUser,
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      backgroundColor: Colors.white, // Button background color
-                      shadowColor: Colors.black.withOpacity(0.2),
-                      elevation: 5,
+                ElevatedButton(
+                  onPressed: loginUser,
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
                     ),
-                    child: Text(
-                      'Login',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'Poppins', // Custom modern font
-                        color: Colors.blueAccent,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    backgroundColor: Colors.white,
+                  ),
+                  child: Text(
+                    'Login',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Poppins',
+                      color: Colors.black54,
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
-                // Already Have an Account? Login
+                SizedBox(height: 30),
+                // Register Now Button
                 TextButton(
                   onPressed: () {
                     Navigator.push(
@@ -219,11 +234,9 @@ class LoginPage extends StatelessWidget {
                       fontSize: 14,
                       fontFamily: 'Poppins',
                       color: Colors.blueAccent,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                SizedBox(height: 50), // Add spacing at the bottom
               ],
             ),
           ),

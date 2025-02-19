@@ -43,7 +43,7 @@ class PartsOfSystemUnitScreen extends StatelessWidget {
             title: "Motherboard",
             description:
             "Sometimes called the system board or main board. It is the main circuit board of a microcomputer, containing connectors for attaching additional boards.",
-            image: "assets/motherboard.jpg",
+            image: "assets/motherboard2.jpg",
           ),
           Divider(),
           // Power Supply Unit
@@ -52,7 +52,7 @@ class PartsOfSystemUnitScreen extends StatelessWidget {
             title: "Power Supply Unit",
             description:
             "This is the device that supplies power to your personal computer. It regulates voltage to eliminate spikes and surges in electrical systems.",
-            image: "assets/power_supply.jpg",
+            image: "assets/power_supply2.jpg",
           ),
           Divider(),
           // Hard Disk Drive
@@ -61,7 +61,7 @@ class PartsOfSystemUnitScreen extends StatelessWidget {
             title: "Hard Disk Drive",
             description:
             "The computer's main storage device used to store all data permanently. HDDs can be SATA (Serial ATA) or EIDE (Enhanced Integrated Drive Electronics).",
-            image: "assets/hard_drive.jpg",
+            image: "assets/hard_drive2.jpg",
           ),
           Divider(),
           // Optical Disk Drive
@@ -70,7 +70,7 @@ class PartsOfSystemUnitScreen extends StatelessWidget {
             title: "Optical Disk Drive",
             description:
             "Allows a user to retrieve, edit, and delete content from optical disks such as CDs, DVDs, and Blu-ray disks. Available in SATA and EIDE types.",
-            image: "assets/optical_disk.jpg",
+            image: "assets/optical_disk2.jpg",
           ),
           Divider(),
           // RAM
@@ -79,7 +79,7 @@ class PartsOfSystemUnitScreen extends StatelessWidget {
             title: "RAM (Random Access Memory)",
             description:
             "The memory that stores data temporarily while the machine is working. It allows data to be accessed randomly.",
-            image: "assets/ram.jpg",
+            image: "assets/ram2.jpg",
           ),
           Divider(),
           // CPU
@@ -88,7 +88,7 @@ class PartsOfSystemUnitScreen extends StatelessWidget {
             title: "CPU (Central Processing Unit)",
             description:
             "The brain of the computer, responsible for processing arithmetic and logical operations. It runs the operating system and applications.",
-            image: "assets/cpu.jpg",
+            image: "assets/cpu2.jpg",
           ),
           Divider(),
           // CPU Cooling System
@@ -97,7 +97,7 @@ class PartsOfSystemUnitScreen extends StatelessWidget {
             title: "CPU Cooling System",
             description:
             "Designed to reduce the CPU's temperature to keep it running in good condition. Includes CPU fans and heatsinks.",
-            image: "assets/cooling_system.jpg",
+            image: "assets/cooling_system2.jpg",
           ),
         ],
       ),

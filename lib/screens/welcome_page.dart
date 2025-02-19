@@ -25,9 +25,10 @@ class _WelcomePageState extends State<WelcomePage> {
 
     if (sessionKey != null && username != null) {
       // Navigate to DashboardPage if a session exists
-      Navigator.pushReplacement(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => DashboardPage(username: username, account: account!)),
+            (Route<dynamic> route) => false,
       );
     }
   }
@@ -86,9 +87,10 @@ class _WelcomePageState extends State<WelcomePage> {
             // Get Started Button
             ElevatedButton(
               onPressed: () {
-                Navigator.pushReplacement(
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginPage()),
+                      (Route<dynamic> route) => false,
                 );
               },
               style: ElevatedButton.styleFrom(

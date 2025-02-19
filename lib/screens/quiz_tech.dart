@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
+import 'dart:math';
 class QuizTechPage extends StatelessWidget {
   final String studentId;
 
@@ -95,7 +95,7 @@ class QuizTechPage extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context); // Close the warning
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => QuizTechGamePage(studentId: studentId),
@@ -146,7 +146,7 @@ class _QuizTechGamePageState extends State<QuizTechGamePage> {
     });
 
     try {
-      // Fetch quiz items based on the student ID, section, and teacher ID
+      // Fetch student details
       final studentResponse = await Supabase.instance.client
           .from('students')
           .select()
@@ -154,12 +154,11 @@ class _QuizTechGamePageState extends State<QuizTechGamePage> {
           .maybeSingle();
 
       if (studentResponse == null || studentResponse['section_name'] == null) {
-        // If section_name is null, navigate back and show a SnackBar
-        Navigator.pop(context); // Go back to the previous page
+        Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Add a section first to continue')),
         );
-        return; // Stop further execution
+        return;
       }
 
       final sectionName = studentResponse['section_name'];
@@ -183,6 +182,7 @@ class _QuizTechGamePageState extends State<QuizTechGamePage> {
 
       setState(() {
         quizItems = quizItemsResponse ?? [];
+        quizItems.shuffle(Random()); // Shuffle only once
         isLoading = false;
       });
     } catch (e) {
@@ -198,7 +198,6 @@ class _QuizTechGamePageState extends State<QuizTechGamePage> {
   void _handleSubmit() async {
     int score = 0;
 
-    // Calculate the score
     for (var i = 0; i < quizItems.length; i++) {
       if (selectedAnswers[i] == quizItems[i]['item_correct_answer']) {
         score++;
@@ -206,7 +205,6 @@ class _QuizTechGamePageState extends State<QuizTechGamePage> {
     }
 
     try {
-      // Fetch the student's current score details
       final studentResponse = await Supabase.instance.client
           .from('students')
           .select()
@@ -220,19 +218,16 @@ class _QuizTechGamePageState extends State<QuizTechGamePage> {
       final latestScore = studentResponse['quiz_latest_score'];
 
       if (latestScore == null) {
-        // If `quiz_latest_score` is empty, insert the new score
         await Supabase.instance.client.from('students').update({
           'quiz_latest_score': score,
         }).eq('student_id', widget.studentId);
       } else {
-        // If `quiz_latest_score` is not empty, update both scores
         await Supabase.instance.client.from('students').update({
-          'quiz_previous_score': latestScore, // Move latest score to previous score
-          'quiz_latest_score': score,        // Update latest score to the new score
+          'quiz_previous_score': latestScore,
+          'quiz_latest_score': score,
         }).eq('student_id', widget.studentId);
       }
 
-      // Show the final score
       _showFinalScore(score);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -250,8 +245,8 @@ class _QuizTechGamePageState extends State<QuizTechGamePage> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.pop(context); // Close dialog
-              Navigator.pop(context); // Return to the previous page
+              Navigator.pop(context);
+              Navigator.pop(context);
             },
             child: Text('OK'),
           ),
@@ -262,25 +257,10 @@ class _QuizTechGamePageState extends State<QuizTechGamePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      return Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    if (quizItems.isEmpty) {
-      return Scaffold(
-        body: Center(
-          child: Text(
-            'No quiz items available.',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-        ),
-      );
-    }
-
     return Scaffold(
-      body: SingleChildScrollView(
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
@@ -302,22 +282,10 @@ class _QuizTechGamePageState extends State<QuizTechGamePage> {
                     SizedBox(height: 10),
                     Column(
                       children: [
-                        _buildRadioButton(
-                          index,
-                          quizItem['item_answer_1'],
-                        ),
-                        _buildRadioButton(
-                          index,
-                          quizItem['item_answer_2'],
-                        ),
-                        _buildRadioButton(
-                          index,
-                          quizItem['item_answer_3'],
-                        ),
-                        _buildRadioButton(
-                          index,
-                          quizItem['item_answer_4'],
-                        ),
+                        _buildRadioButton(index, quizItem['item_answer_1']),
+                        _buildRadioButton(index, quizItem['item_answer_2']),
+                        _buildRadioButton(index, quizItem['item_answer_3']),
+                        _buildRadioButton(index, quizItem['item_answer_4']),
                       ],
                     ),
                   ],
